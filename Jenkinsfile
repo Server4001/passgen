@@ -10,7 +10,6 @@ node('master') {
 
         stage('test') {
             sh "./vendor/bin/phpunit -c ./phpunit.xml"
-            sh "echo 'test'"
         }
 
     } catch(error) {
