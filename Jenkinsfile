@@ -3,7 +3,7 @@
 node('master') {
     try {
         stage('build') {
-            git url: 'git@github.com:Server4001/passgen.git'
+            git url: 'git@github.com:Server4001/passgen.git', credentialsId: 'github-server4001-key'
 
             sh "/var/lib/jenkins/composer install"
         }
