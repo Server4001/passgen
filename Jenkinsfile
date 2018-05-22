@@ -30,6 +30,16 @@ node('master') {
             ])
         }
 
+        stage('ant-command') {
+            step([
+                withAnt(installation: 'Ant v1.7.1') {
+                    dir(".") {
+                        sh "ant -f /vagrant/ant-build-scripts/hello-world.xml main"
+                    }
+                }
+            ])
+        }
+
     } catch(error) {
         // TODO : Add alerting.
         throw error
