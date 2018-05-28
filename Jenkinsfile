@@ -1,18 +1,23 @@
 #!/usr/bin/env groovy
 
 node('master') {
+    properties([
+        [
+            $class: 'BuildDiscarderProperty',
+            strategy: [
+                $class: 'LogRotator',
+                artifactDaysToKeepStr: '',
+                artifactNumToKeepStr: '',
+                daysToKeepStr: '',
+                numToKeepStr: '10'
+            ]
+        ]
+    ]);
+
     try {
         stage('git-pull') {
             git url: 'git@github.com:Server4001/passgen.git', credentialsId: 'github-server4001-key'
             echo "Branch name: ${env.BRANCH_NAME}"
-
-            echo "NOW DUMPING ENV"
-            sh 'env > env.txt'
-            for (String i : readFile('env.txt').split("\r?\n")) {
-                println i
-            }
-            sh 'rm -f env.txt'
-            echo "DONE DUMPING ENV"
         }
 
         stage('build') {
