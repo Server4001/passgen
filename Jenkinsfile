@@ -2,6 +2,10 @@
 
 node('master') {
     try {
+        stage('git-pull') {
+            git url: 'git@github.com:Server4001/passgen.git', credentialsId: 'github-server4001-key'
+        }
+
         stage('build') {
             sh "/var/lib/jenkins/composer install"
         }
@@ -27,16 +31,6 @@ node('master') {
                 healthyTarget: [methodCoverage: 70, conditionalCoverage: 80, statementCoverage: 80],
                 unhealthyTarget: [methodCoverage: 50, conditionalCoverage: 50, statementCoverage: 50],
                 failingTarget: [methodCoverage: 0, conditionalCoverage: 0, statementCoverage: 0]
-            ])
-        }
-
-        stage('ant-command') {
-            step([
-                withAnt(installation: 'Ant v1.7.1') {
-                    dir(".") {
-                        sh "ant -f /vagrant/ant-build-scripts/hello-world.xml main"
-                    }
-                }
             ])
         }
 
