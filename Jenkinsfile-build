@@ -1,18 +1,43 @@
 #!/usr/bin/env groovy
 
 node('master') {
+    properties([
+        // Keep a max of 10 builds on hand:
+        buildDiscarder(logRotator(
+            artifactDaysToKeepStr: '',
+            artifactNumToKeepStr: '',
+            daysToKeepStr: '',
+            numToKeepStr: '10'
+        )),
+        // GitHub project URL:
+        [
+            $class: 'GithubProjectProperty',
+            displayName: '',
+            projectUrlStr: 'https://github.com/Server4001/passgen/'
+        ],
+        // Allow specifying which git branch to build:
+        parameters([[
+            $class: 'GitParameterDefinition',
+            branch: '',
+            branchFilter: '.*',
+            defaultValue: 'master',
+            description: '',
+            name: 'Branch',
+            quickFilterEnabled: false,
+            selectedValue: 'NONE',
+            sortMode: 'ASCENDING',
+            tagFilter: '*',
+            type: 'PT_BRANCH'
+        ]]),
+        // Changing the master branch should trigger this build:
+        pipelineTriggers([githubPush()])
+    ])
+
     try {
         stage('git-pull') {
+        // branch: '${env.Branch}'
             git url: 'git@github.com:Server4001/passgen.git', credentialsId: 'github-server4001-key'
-            echo "Branch name: ${env.BRANCH_NAME}"
-
-            echo "NOW DUMPING ENV"
-            sh 'env > env.txt'
-            for (String i : readFile('env.txt').split("\r?\n")) {
-                println i
-            }
-            sh 'rm -f env.txt'
-            echo "DONE DUMPING ENV"
+            echo "Branch name: ${env.Branch}"
         }
 
         stage('build') {
