@@ -42,7 +42,6 @@ node('master') {
         }
 
         stage('build') {
-            sh "php foo.php"
             sh "/var/lib/jenkins/composer install"
         }
 
