@@ -4,6 +4,7 @@ node('master') {
     try {
         stage('git-pull') {
             git url: 'git@github.com:Server4001/passgen.git', credentialsId: 'github-server4001-key'
+            echo "Branch name: ${env.BRANCH_NAME}"
         }
 
         stage('build') {
