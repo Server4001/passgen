@@ -37,6 +37,7 @@ node('master') {
         stage('git-pull') {
             git url: 'git@github.com:Server4001/passgen.git', credentialsId: 'github-server4001-key', branch: "${env.Branch}"
             sh "php foo.php"
+            sh "php foo.php"
         }
 
         stage('build') {
