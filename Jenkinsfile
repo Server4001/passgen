@@ -3,7 +3,7 @@
 node('master') {
     try {
         stage('git-pull') {
-            git url: 'git@github.com:Server4001/passgen.git', credentialsId: 'github-server4001-key', branch: "${branch_formatted}"
+            git url: 'git@github.com:Server4001/passgen.git', credentialsId: 'github-server4001-key', branch: "${env.BRANCH_NAME}"
         }
 
         stage('build') {
